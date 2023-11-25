@@ -1,4 +1,4 @@
-import React,{ useEffect ,useState} from 'react';
+import React,{ useCallback, useEffect ,useState} from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
@@ -9,11 +9,11 @@ function App() {
  const [error , setError] = useState(null);
 
 
- const fetchMoviesHandler = async () => {
+ const fetchMoviesHandler = useCallback(async () => {
    setLoading(true);
    setError(null);
    try {
-   const response= await fetch("https://swapi.dev/api/film/");
+   const response= await fetch("https://swapi.dev/api/films/");
    if(!response.ok)
    {
      throw new Error("something went Wrong  Retrying ....");
@@ -37,9 +37,11 @@ function App() {
 
    }
    setLoading(false);
- }
+ },[])
  
-
+useEffect(()=>{
+fetchMoviesHandler();
+},[fetchMoviesHandler])
  const cancelHandler = () => {
   setLoading(false);
   setError(null);
